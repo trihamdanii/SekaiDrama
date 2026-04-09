@@ -1,0 +1,92 @@
+"use client";
+
+import { create } from "zustand";
+
+export type Platform = "dramabox" | "reelshort" | "shortmax" | "netshort" | "melolo" | "freereels" | "dramanova";
+
+export interface PlatformInfo {
+  id: Platform;
+  name: string;
+  logo: string;
+  apiBase: string;
+}
+
+export const PLATFORMS: PlatformInfo[] = [
+  {
+    id: "dramabox",
+    name: "DramaBox",
+    logo: "/dramabox.webp",
+    apiBase: "/api/dramabox",
+  },
+  {
+    id: "reelshort",
+    name: "ReelShort",
+    logo: "/reelshort.webp",
+    apiBase: "/api/reelshort",
+  },
+  {
+    id: "shortmax",
+    name: "ShortMax",
+    logo: "/shortmax.webp",
+    apiBase: "/api/shortmax",
+  },
+  {
+    id: "netshort",
+    name: "NetShort",
+    logo: "/netshort.webp",
+    apiBase: "/api/netshort",
+  },
+  {
+    id: "melolo",
+    name: "Melolo",
+    logo: "/melolo.webp",
+    apiBase: "/api/melolo",
+  },
+
+  {
+    id: "freereels",
+    name: "FreeReels",
+    logo: "/freereels.webp",
+    apiBase: "/api/freereels",
+  },
+  {
+    id: "dramanova",
+    name: "DramaNova",
+    logo: "/dramanova.png",
+    apiBase: "/api/dramanova",
+  },
+];
+
+interface PlatformState {
+  currentPlatform: Platform;
+  setPlatform: (platform: Platform) => void;
+}
+
+export const usePlatformStore = create<PlatformState>((set) => ({
+  currentPlatform: "dramabox",
+  setPlatform: (platform) => set({ currentPlatform: platform }),
+}));
+
+export function usePlatform() {
+  const { currentPlatform, setPlatform } = usePlatformStore();
+  const platformInfo = PLATFORMS.find((p) => p.id === currentPlatform)!;
+
+  const getPlatformInfo = (platformId: Platform) => {
+    return PLATFORMS.find((p) => p.id === platformId) || PLATFORMS[0];
+  };
+
+  return {
+    currentPlatform,
+    platformInfo,
+    setPlatform,
+    platforms: PLATFORMS,
+    getPlatformInfo,
+    isDramaBox: currentPlatform === "dramabox",
+    isReelShort: currentPlatform === "reelshort",
+    isShortMax: currentPlatform === "shortmax",
+    isNetShort: currentPlatform === "netshort",
+    isMelolo: currentPlatform === "melolo",
+    isFreeReels: currentPlatform === "freereels",
+    isDramaNova: currentPlatform === "dramanova",
+  };
+}
