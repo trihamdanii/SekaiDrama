@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "SekaiDrama - Streaming Drama Pendek",
@@ -34,6 +35,7 @@ export default function RootLayout({
           <Toaster />
           <Sonner />
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
