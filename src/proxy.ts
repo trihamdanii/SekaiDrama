@@ -18,7 +18,7 @@ export function proxy(request: NextRequest) {
   
   if (ip === '::1') ip = '127.0.0.1';
 
-  const limit = 1000; // Requests per window
+  const limit = 5000; // Requests per window
   const windowMs = 60 * 1000; // 1 minute window
 
   if (!rateLimit.has(ip)) {
