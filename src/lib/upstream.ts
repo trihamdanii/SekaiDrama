@@ -11,11 +11,43 @@ export function getUpstreamHeaders(init?: RequestInit["headers"]): HeadersInit {
   return headers;
 }
 
+function addApiKeyQueryParam(input: RequestInfo): RequestInfo {
+  if (!API_KEY) return input;
+
+  if (typeof input === "string") {
+    const url = new URL(input);
+    if (!url.searchParams.has("api_key")) {
+      url.searchParams.set("api_key", API_KEY);
+    }
+    return url.toString();
+  }
+
+  if (input instanceof URL) {
+    if (!input.searchParams.has("api_key")) {
+      input.searchParams.set("api_key", API_KEY);
+    }
+    return input;
+  }
+
+  if (input instanceof Request) {
+    const url = new URL(input.url);
+    if (!url.searchParams.has("api_key")) {
+      url.searchParams.set("api_key", API_KEY);
+    }
+    return url.toString();
+  }
+
+  return input;
+}
+
 export async function upstreamFetch(input: RequestInfo, init: RequestInit = {}) {
+  const headers = getUpstreamHeaders(init.headers);
+  const requestInput = addApiKeyQueryParam(input);
+
   const initWithHeaders: RequestInit = {
     ...init,
-    headers: getUpstreamHeaders(init.headers),
+    headers,
   };
 
-  return fetch(input, initWithHeaders);
+  return fetch(requestInput, initWithHeaders);
 }
