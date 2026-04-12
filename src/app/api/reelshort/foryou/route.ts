@@ -1,16 +1,17 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { upstreamFetch } from "@/lib/upstream";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/reelshort";
+const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1") + "/reelshort";
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const page = searchParams.get("page") || "1";
     
-    const response = await fetch(`${UPSTREAM_API}/foryou?page=${page}`, {
+    const response = await upstreamFetch(`${UPSTREAM_API}/foryou?page=${page}`, {
       cache: 'no-store',
     });
 

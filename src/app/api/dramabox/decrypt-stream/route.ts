@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import https from "https";
 import http from "http";
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/dramabox";
+const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1") + "/dramabox";
 
 export const dynamic = 'force-dynamic';
 

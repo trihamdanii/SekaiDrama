@@ -1,8 +1,9 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { upstreamFetch } from "@/lib/upstream";
 import { optimizeCover } from "@/lib/image-utils";
 import { NextRequest } from "next/server";
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/shortmax";
+const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1") + "/shortmax";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
       return encryptedResponse({ success: true, data: [] });
     }
 
-    const response = await fetch(
+    const response = await upstreamFetch(
       `${UPSTREAM_API}/search?query=${encodeURIComponent(query)}`,
       { cache: 'no-store' }
     );

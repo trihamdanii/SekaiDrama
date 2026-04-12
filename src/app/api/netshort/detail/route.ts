@@ -1,7 +1,8 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { upstreamFetch } from "@/lib/upstream";
 import { NextRequest, NextResponse } from "next/server";
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/netshort";
+const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1") + "/netshort";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response = await fetch(`${UPSTREAM_API}/allepisode?shortPlayId=${shortPlayId}`, {
+    const response = await upstreamFetch(`${UPSTREAM_API}/allepisode?shortPlayId=${shortPlayId}`, {
       cache: 'no-store',});
 
     if (!response.ok) {

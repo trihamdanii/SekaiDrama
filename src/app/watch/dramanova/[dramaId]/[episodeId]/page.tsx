@@ -32,7 +32,7 @@ export default function DramaNovaWatchPage() {
     if (params.episodeId && params.episodeId !== currentEpisodeId) {
       setCurrentEpisodeId(params.episodeId);
     }
-  }, [params.episodeId]);
+  }, [params.episodeId, currentEpisodeId]);
 
   // Keep previous data to avoid unmounting video during transitions
   // detailData returns { data: DramaNovaDetailData } structure wrapped from response

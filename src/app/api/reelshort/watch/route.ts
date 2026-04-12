@@ -1,7 +1,8 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { upstreamFetch } from "@/lib/upstream";
 import { NextRequest, NextResponse } from "next/server";
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/reelshort";
+const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1") + "/reelshort";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response = await fetch(
+    const response = await upstreamFetch(
       `${UPSTREAM_API}/episode?bookId=${encodeURIComponent(bookId)}&episodeNumber=${encodeURIComponent(episodeNumber)}`,
       {
         cache: 'no-store',

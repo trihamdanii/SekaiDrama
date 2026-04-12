@@ -1,3 +1,4 @@
+import { upstreamFetch } from "@/lib/upstream";
 
 import { type NextRequest } from "next/server";
 import { encryptedResponse } from "@/lib/api-utils";
@@ -11,8 +12,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api";
-    const response = await fetch(`${baseUrl}/melolo/detail?bookId=${bookId}`);
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1";
+    const response = await upstreamFetch(`${baseUrl}/melolo/detail?bookId=${bookId}`);
     const data = await response.json();
     return encryptedResponse(data);
   } catch (error) {

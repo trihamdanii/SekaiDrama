@@ -1,9 +1,10 @@
 import { safeJson, encryptedResponse } from "@/lib/api-utils";
+import { upstreamFetch } from "@/lib/upstream";
 import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
 
-const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api") + "/melolo";
+const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1") + "/melolo";
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest) {
     const offset = searchParams.get("offset") || "0";
     
     // Melolo uses offset-based pagination
-    const response = await fetch(`${UPSTREAM_API}/foryou?offset=${offset}`, {
+    const response = await upstreamFetch(`${UPSTREAM_API}/foryou?offset=${offset}`, {
       cache: 'no-store',
     });
 

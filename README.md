@@ -69,13 +69,18 @@ src/
 │   ├── ui/                 # Base components (Shadcn UI)
 │   ├── player/             # Komponen khusus video player
 │   ├── cards/              # Komponen card drama/koleksi
-│   └── layouts/            # Navbar, Sidebar, Footer
+│   └── layouts/             # Navbar, Sidebar, Footer
 ├── hooks/                  # Custom React Hooks (useAuth, usePlayer, dll)
 ├── lib/                    # Helper functions & konfigurasi library (Prisma, Axios)
 ├── services/               # Logic fetching data & business logic
 ├── types/                  # TypeScript interfaces & types definitions
 └── styles/                 # Global CSS & Tailwind configuration
 ```
+
+## Dokumentasi API
+
+- Halaman dokumentasi di aplikasi: `/docs`
+- Markdown docs: `docs/response-format.md`
 
 ## Kustomisasi
 

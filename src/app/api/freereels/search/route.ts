@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { upstreamFetch } from "@/lib/upstream";
 import { encryptedResponse } from "@/lib/api-utils";
 
 export async function GET(request: NextRequest) {
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.sansekai.my.id/api"}/freereels/search?query=${encodeURIComponent(query)}`, {
+    const res = await upstreamFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1"}/freereels/search?query=${encodeURIComponent(query)}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

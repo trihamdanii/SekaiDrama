@@ -33,7 +33,7 @@ export default function MeloloWatchPage() {
     if (params.videoId && params.videoId !== currentVideoId) {
       setCurrentVideoId(params.videoId);
     }
-  }, [params.videoId]);
+  }, [params.videoId, currentVideoId]);
 
   // Keep previous data to avoid unmounting video during transitions
   const { data: detailData, isLoading: detailLoading } = useMeloloDetail(params.bookId || "");
