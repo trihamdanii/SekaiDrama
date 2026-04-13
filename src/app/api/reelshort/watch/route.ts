@@ -9,20 +9,34 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const bookId = searchParams.get("bookId");
     const episodeNumber = searchParams.get("episodeNumber");
+    const chapterId = searchParams.get("chapterId");
+    const filteredTitle = searchParams.get("filteredTitle");
 
-    if (!bookId || !episodeNumber) {
+    if (!bookId || (!episodeNumber && (!chapterId || !filteredTitle))) {
       return encryptedResponse(
-        { error: "bookId and episodeNumber are required" },
+        {
+          error:
+            "bookId and either episodeNumber or both chapterId and filteredTitle are required",
+        },
         400
       );
     }
 
-    const response = await upstreamFetch(
-      `${UPSTREAM_API}/episode?bookId=${encodeURIComponent(bookId)}&episodeNumber=${encodeURIComponent(episodeNumber)}`,
-      {
-        cache: 'no-store',
-      }
-    );
+    const url = new URL(`${UPSTREAM_API}/episode`);
+    url.searchParams.set("bookId", bookId);
+    if (episodeNumber) {
+      url.searchParams.set("episodeNumber", episodeNumber);
+    }
+    if (chapterId) {
+      url.searchParams.set("chapterId", chapterId);
+    }
+    if (filteredTitle) {
+      url.searchParams.set("filteredTitle", filteredTitle);
+    }
+
+    const response = await upstreamFetch(url.toString(), {
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       return encryptedResponse(

@@ -18,6 +18,14 @@ interface ReelShortDetailData {
 
 import { decryptData } from "@/lib/crypto";
 
+function slugifyText(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 // ... existing code
 
 async function fetchReelShortDetail(bookId: string): Promise<ReelShortDetailData> {
@@ -94,7 +102,7 @@ export default function ReelShortDetailPage() {
               />
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-6">
                 <Link
-                  href={`/watch/reelshort/${data.bookId}`}
+                  href={`/watch/reelshort/${data.bookId}?filteredTitle=${slugifyText(data.title)}`}
                   className="px-8 py-3 rounded-full bg-primary text-primary-foreground font-semibold flex items-center gap-2 hover:scale-105 transition-transform shadow-lg"
                 >
                   <Play className="w-5 h-5 fill-current" />
@@ -129,7 +137,7 @@ export default function ReelShortDetailPage() {
 
               {/* Watch Button */}
               <Link
-                href={`/watch/reelshort/${data.bookId}`}
+                href={`/watch/reelshort/${data.bookId}?filteredTitle=${slugifyText(data.title)}`}
                 className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-primary-foreground transition-all hover:scale-105 shadow-lg"
                 style={{ background: "var(--gradient-primary)" }}
               >

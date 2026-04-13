@@ -24,6 +24,12 @@ Query string:
 ?api_key=cutad_431e4ba1cc86a4b6ad6e668e4a857f8604228f81aadc42b7
 ```
 
+## Error Codes
+
+- **401 Unauthorized**
+  - Penyebab: API key tidak disertakan atau tidak valid.
+  - Solusi: Tambahkan header `X-API-Key` atau parameter query `?api_key=`.
+
 ## Struktur Umum
 
 Semua response utama memiliki struktur:

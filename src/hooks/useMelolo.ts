@@ -90,7 +90,7 @@ export function useMeloloTrending() {
 export function useMeloloSearch(query: string) {
   return useQuery<MeloloSearchResponse>({
     queryKey: ["melolo", "search", query],
-    queryFn: () => fetchJson<MeloloSearchResponse>(`/api/melolo/search?query=${encodeURIComponent(query)}`),
+    queryFn: () => fetchJson<MeloloSearchResponse>(`/api/melolo/search?q=${encodeURIComponent(query)}`),
     enabled: !!query,
   });
 }
@@ -98,7 +98,7 @@ export function useMeloloSearch(query: string) {
 export function useMeloloDetail(bookId: string) {
   return useQuery<MeloloDetailResponse>({
     queryKey: ["melolo", "detail", bookId],
-    queryFn: () => fetchJson<MeloloDetailResponse>(`/api/melolo/detail?bookId=${bookId}`),
+    queryFn: () => fetchJson<MeloloDetailResponse>(`/api/melolo/detail?id=${bookId}`),
     enabled: !!bookId,
     staleTime: 5 * 60 * 1000,
   });

@@ -32,23 +32,52 @@ interface DetailData {
   title: string;
   cover: string;
   totalEpisodes: number;
+  first_chapter_id?: string;
+  start_play?: {
+    chapter_id?: string;
+  };
 }
 
 import { decryptData } from "@/lib/crypto";
 
-// ... existing code
+function slugifyText(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
-async function fetchEpisode(bookId: string, episodeNumber: number): Promise<EpisodeData> {
-  const response = await fetch(`/api/reelshort/watch?bookId=${bookId}&episodeNumber=${episodeNumber}`);
+async function fetchEpisode(
+  bookId: string,
+  episodeNumber: number,
+  chapterId?: string,
+  filteredTitle?: string
+): Promise<EpisodeData> {
+  const params = new URLSearchParams({
+    bookId,
+    episodeNumber: String(episodeNumber),
+  });
+
+  if (chapterId) {
+    params.set("chapterId", chapterId);
+  }
+
+  if (filteredTitle) {
+    params.set("filteredTitle", filteredTitle);
+  }
+
+  const response = await fetch(`/api/reelshort/watch?${params.toString()}`);
+
   if (!response.ok) {
-    const errorData = await response.json(); // May accept unencrypted error, but trying safeJson approach is better if available.
-                                             // However, since we standardized on encryptedResponse, we should expect encrypted error too.
     throw new Error("Failed to fetch episode");
   }
+
   const json = await response.json();
   if (json.data && typeof json.data === "string") {
     return decryptData(json.data);
   }
+
   return json;
 }
 
@@ -76,14 +105,6 @@ export default function ReelShortWatchPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
 
-  // Get episode from URL
-  useEffect(() => {
-    const ep = searchParams.get("ep");
-    if (ep) {
-      setCurrentEpisode(parseInt(ep) || 1);
-    }
-  }, [searchParams]);
-
   // Fetch detail for title and episode count
   const { data: detailData } = useQuery({
     queryKey: ["reelshort", "detail", bookId],
@@ -91,10 +112,36 @@ export default function ReelShortWatchPage() {
     enabled: !!bookId,
   });
 
+  const currentSearchEpisode = useMemo(() => {
+    const ep = searchParams.get("ep");
+    return ep ? parseInt(ep, 10) || 1 : 1;
+  }, [searchParams]);
+
+  const chapterId = useMemo(() => {
+    return (
+      searchParams.get("chapterId") ||
+      detailData?.start_play?.chapter_id ||
+      detailData?.first_chapter_id ||
+      ""
+    );
+  }, [searchParams, detailData]);
+
+  const filteredTitle = useMemo(() => {
+    return (
+      searchParams.get("filteredTitle") ||
+      (detailData?.title ? slugifyText(detailData.title) : "")
+    );
+  }, [searchParams, detailData]);
+
+  // Get episode from URL
+  useEffect(() => {
+    setCurrentEpisode(currentSearchEpisode);
+  }, [currentSearchEpisode]);
+
   // Fetch episode video
   const { data: episodeData, isLoading, error } = useQuery({
-    queryKey: ["reelshort", "episode", bookId, currentEpisode],
-    queryFn: () => fetchEpisode(bookId || "", currentEpisode),
+    queryKey: ["reelshort", "episode", bookId, currentEpisode, chapterId, filteredTitle],
+    queryFn: () => fetchEpisode(bookId || "", currentEpisode, chapterId || undefined, filteredTitle || undefined),
     enabled: !!bookId && currentEpisode > 0,
   });
 
@@ -179,13 +226,21 @@ export default function ReelShortWatchPage() {
     if (currentEpisode < totalEpisodes) {
       const nextEp = currentEpisode + 1;
       setCurrentEpisode(nextEp);
-      window.history.replaceState(null, '', `/watch/reelshort/${bookId}?ep=${nextEp}`);
+      const nextParams = new URLSearchParams();
+      nextParams.set("ep", String(nextEp));
+      if (filteredTitle) nextParams.set("filteredTitle", filteredTitle);
+      if (chapterId) nextParams.set("chapterId", chapterId);
+      window.history.replaceState(null, "", `/watch/reelshort/${bookId}?${nextParams.toString()}`);
     }
-  }, [currentEpisode, detailData?.totalEpisodes, bookId]);
+  }, [currentEpisode, detailData?.totalEpisodes, bookId, filteredTitle, chapterId]);
 
   const goToEpisode = (ep: number) => {
     setCurrentEpisode(ep);
-    router.replace(`/watch/reelshort/${bookId}?ep=${ep}`, { scroll: false });
+    const nextParams = new URLSearchParams();
+    nextParams.set("ep", String(ep));
+    if (filteredTitle) nextParams.set("filteredTitle", filteredTitle);
+    if (chapterId) nextParams.set("chapterId", chapterId);
+    router.replace(`/watch/reelshort/${bookId}?${nextParams.toString()}`, { scroll: false });
     setShowEpisodeList(false);
   };
 

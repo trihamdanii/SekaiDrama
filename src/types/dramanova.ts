@@ -115,6 +115,10 @@ export interface DramaNovaVideoResult {
   Vid: string;
   PlayInfoList: DramaNovaPlayInfo[];
   SubtitleInfoList: DramaNovaSubtitleInfo[];
+  servers?: any[];
+  embedUrl?: string;
+  type?: string;
+  platform?: string;
 }
 
 export interface DramaNovaVideoOuterResponse {

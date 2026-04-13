@@ -81,6 +81,7 @@ src/
 
 - Halaman dokumentasi di aplikasi: `/docs`
 - Markdown docs: `docs/response-format.md`
+- Catatan provider khusus tersedia di kedua dokumentasi (DramaBox, Donghua, MovieBox, FreeReels, ReelShort, FlickReels, Melolo)
 
 ## Kustomisasi
 

@@ -6,14 +6,15 @@ import { encryptedResponse } from "@/lib/api-utils";
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const bookId = searchParams.get("bookId");
+  const id = searchParams.get("id") || bookId;
 
-  if (!bookId) {
-    return Response.json({ error: "Missing bookId" }, { status: 400 });
+  if (!id) {
+    return Response.json({ error: "Missing id" }, { status: 400 });
   }
 
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1";
-    const response = await upstreamFetch(`${baseUrl}/melolo/detail?bookId=${bookId}`);
+    const response = await upstreamFetch(`${baseUrl}/melolo/detail?id=${encodeURIComponent(id)}`);
     const data = await response.json();
     return encryptedResponse(data);
   } catch (error) {

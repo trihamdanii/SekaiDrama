@@ -23,6 +23,22 @@ export default function DocsPage() {
       </section>
 
       <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Error Codes</h2>
+        <p className="text-slate-700 dark:text-slate-300">
+          Jika request gagal karena otentikasi, gunakan header atau query parameter API key.
+        </p>
+        <div className="rounded-lg border border-amber-300/30 bg-amber-50 p-4 text-sm text-slate-900 dark:border-amber-500/30 dark:bg-slate-900 dark:text-slate-100">
+          <p className="font-semibold">401 Unauthorized</p>
+          <p className="text-slate-700 dark:text-slate-300">
+            API key tidak disertakan atau tidak valid.
+          </p>
+          <p className="text-slate-700 dark:text-slate-300">
+            Tambahkan <code>X-API-Key</code> header atau <code>?api_key=</code> query string.
+          </p>
+        </div>
+      </section>
+
+      <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Response Format Umum</h2>
         <pre className="rounded-lg bg-slate-950/90 p-4 text-sm text-slate-100 overflow-x-auto">
 {`{
@@ -30,6 +46,20 @@ export default function DocsPage() {
   "pagination": { "page": 1, "size": 20, "total": 150, "hasMore": true }
 }`}
         </pre>
+      </section>
+
+      <section className="mt-10 space-y-4">
+        <h2 className="text-2xl font-semibold">Aksi Umum API</h2>
+        <p className="text-slate-700 dark:text-slate-300">
+          Setiap provider menggunakan action berikut untuk mengambil data dan navigasi konten.
+        </p>
+        <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
+          <li><code>rank</code></li>
+          <li><code>detail</code></li>
+          <li><code>episodes</code></li>
+          <li><code>watch</code></li>
+          <li><code>search</code></li>
+        </ul>
       </section>
 
       <section className="mt-10 space-y-4">
@@ -140,15 +170,15 @@ export default function DocsPage() {
       </section>
 
       <section className="mt-10 space-y-3">
-        <h2 className="text-2xl font-semibold">Catatan Provider</h2>
+        <h2 className="text-2xl font-semibold">ℹ️ Catatan per Provider</h2>
         <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
-          <li>DramaBox — field berbeda: <code>bookId</code>, <code>bookName</code>, <code>introduction</code>, <code>chapters[]</code>.</li>
-          <li>Donghua watch — tambahan <code>servers[]</code>, <code>embedUrl</code>, <code>type</code>, <code>platform</code>.</li>
-          <li>MovieBox watch — tambahan <code>subtitles[]</code>, <code>streams[]</code>.</li>
-          <li>FreeReels watch — tambahan <code>subtitles[]</code>, <code>quality</code>.</li>
-          <li>ReelShort — perlu <code>bookId</code> + <code>chapterId</code> + <code>filteredTitle</code> untuk watch.</li>
-          <li>FlickReels watch — response <code>Content-Type: application/vnd.apple.mpegurl</code>.</li>
-          <li>Melolo search — filter lokal cache bookmall, bukan upstream search API.</li>
+          <li>DramaBox — field beda: <code>bookId</code>, <code>bookName</code>, <code>introduction</code>, <code>chapters[]</code> (bukan <code>episodes</code>).</li>
+          <li>Donghua watch — tambahan field: <code>servers[]</code> (daftar server embed), <code>embedUrl</code>, <code>type</code> (embed/direct), <code>platform</code>.</li>
+          <li>MovieBox watch — tambahan field: <code>subtitles[]</code> (multi-bahasa), <code>streams[]</code> (multi-quality).</li>
+          <li>FreeReels watch — tambahan field: <code>subtitles[]</code> (multi-bahasa), <code>quality</code>.</li>
+          <li>ReelShort — flow beda: perlu <code>bookId</code> + <code>chapterId</code> + <code>filteredTitle</code> untuk watch (bukan cukup <code>id</code> saja).</li>
+          <li>FlickReels watch — response <code>Content-Type: application/vnd.apple.mpegurl</code> (raw m3u8, bukan JSON). Segment URL otomatis diproxy.</li>
+          <li>Melolo search — menggunakan filter lokal dari cache bookmall, bukan search API. Hasil terbatas.</li>
         </ul>
       </section>
 
@@ -169,25 +199,6 @@ export default function DocsPage() {
         <p className="text-slate-700 dark:text-slate-300">
           Catatan: ID yang sama akan selalu menghasilkan hash yang sama. Jadi <code>a3f8b2c1</code> selalu merujuk ke konten yang sama, selama server aktif.
         </p>
-      </section>
-
-      <section className="mt-10 space-y-4">
-        <h2 className="text-2xl font-semibold">Endpoint dan Provider</h2>
-        <p className="text-slate-700 dark:text-slate-300">
-          Semua provider tersedia di path <code>/public/api/v1/{'{provider}'}/{'{action}'}</code>.
-        </p>
-        <ul className="list-disc pl-5 space-y-2 text-slate-700 dark:text-slate-300">
-          <li>Anime</li>
-          <li>Donghua</li>
-          <li>DramaBox</li>
-          <li>Melolo</li>
-          <li>Film1</li>
-          <li>Film Indonesia</li>
-          <li>MovieBox</li>
-          <li>FreeReels</li>
-          <li>ReelShort</li>
-          <li>FlickReels</li>
-        </ul>
       </section>
 
       <section className="mt-10 space-y-4">
