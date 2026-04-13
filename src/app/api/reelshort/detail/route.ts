@@ -7,17 +7,17 @@ const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const bookId = searchParams.get("bookId");
+  const bookId = searchParams.get("bookId") || searchParams.get("id");
 
-    if (!bookId) {
+  if (!bookId) {
       return encryptedResponse(
-        { error: "bookId is required" },
+        { error: "bookId or id is required" },
         400
       );
-    }
+  }
 
-    const response = await upstreamFetch(
-      `${UPSTREAM_API}/detail?bookId=${encodeURIComponent(bookId)}`,
+  const response = await upstreamFetch(
+      `${UPSTREAM_API}/detail?id=${encodeURIComponent(bookId)}`,
       {
         cache: 'no-store',
       }

@@ -7,7 +7,7 @@ const UPSTREAM_API = (process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const bookId = searchParams.get("bookId");
+    const bookId = searchParams.get("bookId") || searchParams.get("id");
     const episodeNumber = searchParams.get("episodeNumber");
     const chapterId = searchParams.get("chapterId");
     const filteredTitle = searchParams.get("filteredTitle");
@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const url = new URL(`${UPSTREAM_API}/episode`);
-    url.searchParams.set("bookId", bookId);
+    const url = new URL(`${UPSTREAM_API}/episodes`);
+    url.searchParams.set("id", bookId);
     if (episodeNumber) {
       url.searchParams.set("episodeNumber", episodeNumber);
     }

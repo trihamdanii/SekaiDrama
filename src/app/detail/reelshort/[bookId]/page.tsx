@@ -8,12 +8,17 @@ import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
 
 interface ReelShortDetailData {
-  success: boolean;
+  id: string;
   bookId: string;
   title: string;
   cover: string;
   description: string;
   totalEpisodes: number;
+  chapters?: Array<{
+    chapter_id: string;
+    chapter_name: string;
+    episode: number;
+  }>;
 }
 
 import { decryptData } from "@/lib/crypto";
@@ -34,10 +39,8 @@ async function fetchReelShortDetail(bookId: string): Promise<ReelShortDetailData
     throw new Error("Failed to fetch detail");
   }
   const json = await response.json();
-  if (json.data && typeof json.data === "string") {
-    return decryptData(json.data);
-  }
-  return json;
+  const payload = json.data && typeof json.data === "string" ? decryptData(json.data) : json;
+  return payload.data || payload;
 }
 
 export default function ReelShortDetailPage() {
@@ -55,7 +58,7 @@ export default function ReelShortDetailPage() {
     return <DetailSkeleton />;
   }
 
-  if (error || !data?.success) {
+  if (error || !data?.bookId) {
     return (
       <div className="min-h-screen pt-24 px-4">
         <UnifiedErrorDisplay 
