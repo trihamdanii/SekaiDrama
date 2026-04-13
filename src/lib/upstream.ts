@@ -1,5 +1,5 @@
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://www.cutad.web.id/public/api/v1";
-export const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "";
+export const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "cutad_431e4ba1cc86a4b6ad6e668e4a857f8604228f81aadc42b7";
 
 export function getUpstreamHeaders(init?: RequestInit["headers"]): HeadersInit {
   const headers = new Headers(init as HeadersInit | undefined);
