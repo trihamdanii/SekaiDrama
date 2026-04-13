@@ -47,6 +47,10 @@ export function useForYouDramas() {
   });
 }
 
+export function useMustSeeDramas() {
+  return useForYouDramas();
+}
+
 export function useLatestDramas() {
   return useQuery({
     queryKey: ["dramas", "latest"],

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMeloloLatest, useMeloloTrending } from "@/hooks/useMelolo";
+import { useMeloloLatest, useMeloloRank } from "@/hooks/useMelolo";
 import { UnifiedMediaCard } from "./UnifiedMediaCard";
 import { UnifiedErrorDisplay } from "./UnifiedErrorDisplay";
 import { InfiniteMeloloSection } from "./InfiniteMeloloSection";
@@ -30,12 +30,12 @@ export function MeloloHome() {
   } = useMeloloLatest();
 
   const { 
-    data: trendingData, 
-    isLoading: loadingTrending, 
-    error: errorTrending 
-  } = useMeloloTrending();
+    data: rankData, 
+    isLoading: loadingRank, 
+    error: errorRank 
+  } = useMeloloRank();
 
-  if (errorLatest || errorTrending) {
+  if (errorLatest || errorRank) {
     return (
       <UnifiedErrorDisplay 
         onRetry={() => window.location.reload()} 
@@ -43,7 +43,7 @@ export function MeloloHome() {
     );
   }
 
-  if (loadingLatest || loadingTrending) {
+  if (loadingLatest || loadingRank) {
     return (
       <div className="space-y-8 animate-fade-in">
         <MeloloSectionSkeleton />
@@ -54,23 +54,23 @@ export function MeloloHome() {
 
   return (
     <div className="space-y-8 animate-fade-in pb-12">
-      {/* Trending Section */}
-      {trendingData?.books && trendingData.books.length > 0 && (
+      {/* Popular / Rank Section */}
+      {rankData?.books && rankData.books.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
              <h2 className="font-display font-bold text-xl md:text-2xl text-foreground">
-               Sedang Hangat
+               Populer
              </h2>
           </div>
           
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
-            {trendingData.books.map((book, index) => (
+            {rankData.books.map((book, index) => (
               <UnifiedMediaCard
                 key={book.book_id}
                 title={book.book_name}
                 cover={book.thumb_url}
                 link={`/detail/melolo/${book.book_id}`}
-                episodes={book.serial_count || 0} 
+                episodes={book.serial_count || 0}
                 topLeftBadge={null}
                 index={index}
               />
@@ -107,7 +107,7 @@ export function MeloloHome() {
       {/* Infinite Scroll Section */}
       <InfiniteMeloloSection title="Lainnya" />
 
-      {!loadingLatest && !loadingTrending && !latestData?.books?.length && !trendingData?.books?.length && (
+      {!loadingLatest && !loadingRank && !latestData?.books?.length && !rankData?.books?.length && (
          <div className="text-center py-20 text-muted-foreground">
            Tidak ada konten tersedia saat ini.
          </div>

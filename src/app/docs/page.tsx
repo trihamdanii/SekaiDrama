@@ -5,6 +5,12 @@ export default function DocsPage() {
       <p className="mb-6 text-lg leading-8 text-slate-700 dark:text-slate-300">
         Format response konsisten untuk endpoint <code>/public/api/v1/{'{provider}'}/{'{action}'}</code>.
       </p>
+      <p className="mb-6 text-lg leading-8 text-slate-700 dark:text-slate-300">
+        Semua request dikirim ke base URL <code>https://www.cutad.web.id</code> dengan format:
+      </p>
+      <pre className="rounded-lg bg-slate-950/90 p-4 text-sm text-slate-100 overflow-x-auto">
+{`{BASE}/public/api/v1/{provider}/{action}?{params}`}
+</pre>
 
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">API Key</h2>

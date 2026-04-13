@@ -10,7 +10,7 @@ import { MeloloHome } from "@/components/MeloloHome";
 import { FreeReelsHome } from "@/components/FreeReelsHome";
 import { DramaNovaHome } from "@/components/DramaNovaHome";
 import { InfiniteDramaSection } from "@/components/InfiniteDramaSection";
-import { useLatestDramas, useTrendingDramas, useDubindoDramas } from "@/hooks/useDramas";
+import { useLatestDramas, useTrendingDramas, useDubindoDramas, useMustSeeDramas } from "@/hooks/useDramas";
 import { usePlatform } from "@/hooks/usePlatform";
 import type { Drama } from "@/types/drama";
 
@@ -97,6 +97,12 @@ export default function HomeContent() {
     error: errorDubindo,
     refetch: refetchDubindo,
   } = useDubindoDramas();
+  const {
+    data: mustSeeDramas,
+    isLoading: loadingMustSee,
+    error: errorMustSee,
+    refetch: refetchMustSee,
+  } = useMustSeeDramas();
 
   const featuredDramas = latestDramas?.slice(0, 3) ?? [];
 
@@ -216,11 +222,18 @@ export default function HomeContent() {
             onRetry={() => refetchTrending()}
           />
           <DramaSection
-            title="Dubindo"
+            title="Indo"
             dramas={dubindoDramas}
             isLoading={loadingDubindo}
             error={!!errorDubindo}
             onRetry={() => refetchDubindo()}
+          />
+          <DramaSection
+            title="Must-see"
+            dramas={mustSeeDramas}
+            isLoading={loadingMustSee}
+            error={!!errorMustSee}
+            onRetry={() => refetchMustSee()}
           />
           <InfiniteDramaSection title="Lainnya" />
         </div>

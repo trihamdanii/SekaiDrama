@@ -79,12 +79,16 @@ export function useMeloloLatest() {
   });
 }
 
-export function useMeloloTrending() {
+export function useMeloloRank() {
   return useQuery<MeloloResponse>({
-    queryKey: ["melolo", "trending"],
-    queryFn: () => fetchJson<MeloloResponse>("/api/melolo/trending"),
+    queryKey: ["melolo", "rank"],
+    queryFn: () => fetchJson<MeloloResponse>("/api/melolo/rank"),
     staleTime: 5 * 60 * 1000,
   });
+}
+
+export function useMeloloTrending() {
+  return useMeloloRank();
 }
 
 export function useMeloloSearch(query: string) {

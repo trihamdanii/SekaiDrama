@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useFreeReelsHome, useFreeReelsAnime, FreeReelsModule, FreeReelsItem } from "@/hooks/useFreeReels";
+import { useFreeReelsHome, useFreeReelsAnime, useFreeReelsRank, FreeReelsModule, FreeReelsItem } from "@/hooks/useFreeReels";
 import { UnifiedMediaCard } from "./UnifiedMediaCard";
 import { UnifiedMediaCardSkeleton } from "./UnifiedMediaCardSkeleton";
 import { UnifiedErrorDisplay } from "./UnifiedErrorDisplay";
@@ -53,18 +53,26 @@ export function FreeReelsHome() {
   } = useFreeReelsHome();
 
   const { 
+    data: rankData, 
+    isLoading: loadingRank, 
+    error: errorRank, 
+    refetch: refetchRank 
+  } = useFreeReelsRank();
+
+  const { 
     data: animeData, 
     isLoading: loadingAnime, 
     error: errorAnime, 
     refetch: refetchAnime 
   } = useFreeReelsAnime();
 
-  if (errorHome && errorAnime) {
+  if ((errorHome && errorAnime) || errorRank) {
     return (
       <UnifiedErrorDisplay 
         onRetry={() => {
           if (errorHome) refetchHome();
           if (errorAnime) refetchAnime();
+          if (errorRank) refetchRank();
         }} 
       />
     );
@@ -73,6 +81,34 @@ export function FreeReelsHome() {
   return (
     <div className="space-y-8 pb-20">
       
+      {/* SECTION: Popular Short Dramas */}
+      {loadingRank ? (
+        <SectionLoader count={8} titleWidth="w-40" />
+      ) : (
+        rankData?.data?.items && rankData.data.items.length > 0 && (
+          <section className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display font-bold text-xl md:text-2xl text-foreground">
+                Populer
+              </h2>
+            </div>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3 md:gap-4">
+              {rankData.data.items.map((item, idx) => (
+                <UnifiedMediaCard
+                  key={`${item.key || item.id}-rank-${idx}`}
+                  title={item.title}
+                  cover={item.cover}
+                  link={`/detail/freereels/${item.key || item.id}`}
+                  episodes={item.episode_count || 0}
+                  topRightBadge={item.follow_count ? { text: `${(item.follow_count / 1000).toFixed(1)}k`, isTransparent: true } : null}
+                  index={idx}
+                />
+              ))}
+            </div>
+          </section>
+        )
+      )}
+
       {/* SECTION: Homepage Modules */}
       {loadingHome ? (
         <SectionLoader count={6} titleWidth="w-40" />

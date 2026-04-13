@@ -25,6 +25,7 @@ export interface ReelShortStartPlay {
 }
 
 export interface ReelShortBook {
+  id?: string;
   book_id: string;
   book_type: number;
   book_title: string;

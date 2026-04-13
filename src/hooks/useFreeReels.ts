@@ -6,6 +6,7 @@ import { fetchJson } from "@/lib/fetcher";
 
 // Interfaces based on FreeReels JSON response
 export interface FreeReelsItem {
+  id?: string;
   key: string;
   cover: string;
   title: string;
@@ -37,6 +38,14 @@ export interface FreeReelsForYouResponse {
        next: string;
        has_more: boolean;
     };
+  };
+}
+
+export interface FreeReelsRankResponse {
+  code: number;
+  message: string;
+  data: {
+    items: FreeReelsItem[];
   };
 }
 
@@ -74,6 +83,27 @@ export function useFreeReelsForYou() {
     queryKey: ["freereels", "foryou"],
     queryFn: () => fetchJson<FreeReelsForYouResponse>("/api/freereels/foryou"),
     staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useFreeReelsRank() {
+  return useQuery<FreeReelsRankResponse>({
+    queryKey: ["freereels", "rank"],
+    queryFn: () => fetchJson<FreeReelsRankResponse>("/api/freereels/rank"),
+    staleTime: 5 * 60 * 1000,
+    select: (response) => {
+      const items = response.data?.items?.map(item => ({
+        ...item,
+        key: item.key || item.id || "",
+      })) as FreeReelsItem[];
+      return {
+        ...response,
+        data: {
+          ...response.data,
+          items,
+        },
+      };
+    },
   });
 }
 
